@@ -8,6 +8,7 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Onboarding Screen'),
+
       ),
       body: const Center(
         child: Text('Welcome to the Onboarding Screen!'),
