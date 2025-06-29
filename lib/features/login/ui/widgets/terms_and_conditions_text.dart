@@ -17,5 +17,6 @@ class TermsAndConditionsText extends StatelessWidget {
     ]));
   }
 
-  // test the commit
+  // test the commit again
+
 }
