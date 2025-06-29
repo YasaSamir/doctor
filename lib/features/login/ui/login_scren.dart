@@ -1,24 +1,21 @@
 import 'package:doctor/core/helpers/extensions.dart';
 import 'package:doctor/features/login/ui/widgets/already_have_account_text.dart';
+import 'package:doctor/features/login/ui/widgets/email_and_password.dart';
+import 'package:doctor/features/login/ui/widgets/login_bloc_lisener.dart';
 import 'package:doctor/features/login/ui/widgets/terms_and_conditions_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/helpers/spacing.dart';
 import '../../../core/theming/styles.dart';
 import '../../../core/widgets/app_text_button.dart';
 import '../../../core/widgets/app_text_form_field.dart';
+import '../data/models/login_request_body.dart';
+import '../logic/login_cubit.dart';
 
-class LoginScren extends StatefulWidget {
+class LoginScren extends StatelessWidget {
   const LoginScren({super.key});
-
-  @override
-  State<LoginScren> createState() => _LoginScrenState();
-}
-
-class _LoginScrenState extends State<LoginScren> {
-  final _formKey = GlobalKey<FormState>();
-  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -39,45 +36,40 @@ class _LoginScrenState extends State<LoginScren> {
                   ),
                 ),
                 verticalSpace(36),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      const AppTextFormField(hintText: "Email"),
-                      verticalSpace(18),
-                      AppTextFormField(
-                        hintText: "Password",
-                        obscureText: isObscure,
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          child: Icon(
-                            isObscure ? Icons.visibility_off : Icons.visibility,
-                          ),
-                        ),
-                      ),
-                      verticalSpace(24),
-                      Align(
-                        alignment: Alignment.centerRight,
-                          child: Text('Forgot password ?',style: TextStyles.font13BlueRegular,),
-                      ),
-                      verticalSpace(40),
-                      AppTextButton(
-                        buttonText: 'Login',
-                        buttonTextStyle: TextStyles.font16WhiteSemiBold,
-                        onPressed: () {},
-                      ),
-                      verticalSpace(16),
-                      const TermsAndConditionsText(),
-                      verticalSpace(60),
-                      const AlreadyHaveAccountText(),
+                Column(
+                  children: [
+
+                    const EmailAndPassword(),
+
+                    verticalSpace(24),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                        child: Text('Forgot password ?',style: TextStyles.font13BlueRegular,),
+                    ),
+
+                    verticalSpace(40),
+
+                    AppTextButton(
+                      buttonText: 'Login',
+                      buttonTextStyle: TextStyles.font16WhiteSemiBold,
+                      onPressed: () {
+                        validateThenDoLogin(context);
+                      },
+                    ),
+
+                    verticalSpace(16),
+
+                    const TermsAndConditionsText(),
+
+                    verticalSpace(60),
+
+                    const AlreadyHaveAccountText(),
+
+                    const LoginBlocLisener(),
 
 
-                    ],
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -85,5 +77,11 @@ class _LoginScrenState extends State<LoginScren> {
         ),
       ),
     );
+  }
+
+  void validateThenDoLogin(BuildContext context) {
+    if(context.read<LoginCubit>().formKey.currentState!.validate()){
+      context.read<LoginCubit>().emitLoginStates();
+    }
   }
 }
