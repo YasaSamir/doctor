@@ -5,7 +5,6 @@ import '../data/models/login_request_body.dart';
 import '../data/repos/login_repo.dart';
 import 'login_state.dart';
 
-
 class LoginCubit extends Cubit<LoginState> {
   final LoginRepo _loginRepo;
   LoginCubit(this._loginRepo) : super(const LoginState.initial());
@@ -23,10 +22,15 @@ class LoginCubit extends Cubit<LoginState> {
       ),
     );
     response.when(success: (loginResponse) async {
+      // await saveUserToken(loginResponse.userData?.token ?? '');
       emit(LoginState.success(loginResponse));
     }, failure: (error) {
       emit(LoginState.error(error: error.apiErrorModel.message ?? ''));
     });
   }
 
+  // Future<void> saveUserToken(String token) async {
+  //   await SharedPrefHelper.setSecuredString(SharedPrefKeys.userToken, token);
+  //   DioFactory.setTokenIntoHeaderAfterLogin(token);
+  // }
 }
