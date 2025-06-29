@@ -16,4 +16,7 @@ class TermsAndConditionsText extends StatelessWidget {
       TextSpan(text: ' Privacy Policy.',style: TextStyles.font13DarkBlueMedium),
     ]));
   }
+
+  // test the commit again
+
 }
